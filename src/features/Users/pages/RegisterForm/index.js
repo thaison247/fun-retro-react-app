@@ -1,21 +1,22 @@
 import { Form, Input, Button, Checkbox } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import "../style.css";
+import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
+import "./style.css";
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
   };
 
   return (
-    <Form
+    <Form.Item
       name="normal_login"
       className="login-form"
-      initialValues={{
-        remember: true,
-      }}
+      // initialValues={{
+      //   remember: true,
+      // }}
       onFinish={onFinish}
     >
+      <h1>Register</h1>
       <Form.Item
         name="username"
         rules={[
@@ -28,6 +29,20 @@ const LoginForm = () => {
         <Input
           prefix={<UserOutlined className="site-form-item-icon" />}
           placeholder="Username"
+        />
+      </Form.Item>
+      <Form.Item
+        name="email"
+        rules={[
+          {
+            required: true,
+            message: "Please input your Email!",
+          },
+        ]}
+      >
+        <Input
+          prefix={<MailOutlined className="site-form-item-icon" />}
+          placeholder="Email"
         />
       </Form.Item>
       <Form.Item
@@ -45,24 +60,30 @@ const LoginForm = () => {
           placeholder="Password"
         />
       </Form.Item>
-      <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
-        <a className="login-form-forgot" href="">
-          Forgot password
-        </a>
+      <Form.Item
+        name="repeat_password"
+        rules={[
+          {
+            required: true,
+            message: "Please input your Password!",
+          },
+        ]}
+      >
+        <Input
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          type="password"
+          placeholder="Repeat password"
+        />
       </Form.Item>
 
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
-          Log in
+          Register
         </Button>
-        Or <a href="">register now!</a>
+        Or <a href="">Login now!</a>
       </Form.Item>
-    </Form>
+    </Form.Item>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

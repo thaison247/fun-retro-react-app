@@ -127,7 +127,6 @@ const Column = ({ col }) => {
             </Card>
           );
         })}
-      ;
       <Modal
         title="Add Card"
         visible={visibleAdd}

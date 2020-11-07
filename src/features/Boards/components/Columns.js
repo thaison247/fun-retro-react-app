@@ -112,6 +112,7 @@ const Column = ({ col }) => {
               key={card.card_id}
               bordered={false}
               style={{ width: 300 }}
+              size={"default"}
               actions={[
                 <EditOutlined
                   key="edit"

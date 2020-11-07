@@ -4,7 +4,7 @@ import Column from "../../components/Columns";
 
 const BoardDetail = ({ match }) => {
   const [boardInfo, setBoardInfo] = useState({});
-  console.log(match);
+  console.log("match: ----> ", match);
   const { boardId } = match.params;
 
   useEffect(() => {

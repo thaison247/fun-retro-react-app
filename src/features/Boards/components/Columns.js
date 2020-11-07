@@ -35,8 +35,8 @@ const Column = ({ col }) => {
 
   const handleAddOk = async () => {
     const result = await axios.post("http://localhost:3001/cards/", {
-      columnId: col.columnId,
-      cardContent: content,
+      column_id: col.columnId,
+      content: content,
     });
 
     console.log(result);

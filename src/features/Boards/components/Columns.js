@@ -56,8 +56,8 @@ const Column = ({ col }) => {
     console.log(cardId);
     setVisibleEdit(true);
     const editContent = listCard.filter((card) => {
-      return card.cardId == cardId;
-    })[0].cardContent;
+      return card.card_id == cardId;
+    })[0].content;
     console.log(editContent);
     setContent(editContent);
     setCardId(cardId);
@@ -65,12 +65,12 @@ const Column = ({ col }) => {
 
   const handleEditOk = async () => {
     const result = await axios.patch(`http://localhost:3001/cards/${cardId}`, {
-      columnId: col.columnId,
-      cardContent: content,
+      column_id: col.columnId,
+      content: content,
     });
 
     const updatedListCard = listCard.map((card) => {
-      if (card.cardId === cardId) {
+      if (card.card_id === cardId) {
         return result.data.data.card;
       }
       return card;
@@ -93,11 +93,11 @@ const Column = ({ col }) => {
   };
 
   const handleDelete = async (cardId) => {
-    const result = await axios.delete(`http://localhost:7000/cards/${cardId}`, {
+    const result = await axios.delete(`http://localhost:3001/cards/${cardId}`, {
       userId: 1,
     });
 
-    setListCard(listCard.filter((card) => card.cardId !== cardId));
+    setListCard(listCard.filter((card) => card.card_id !== cardId));
   };
 
   return (

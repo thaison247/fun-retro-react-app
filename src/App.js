@@ -1,21 +1,13 @@
-import "./App.css";
-import ListBoards from "./features/Boards/components/ListBoards";
 import "antd/dist/antd.css";
-import { PageHeader } from "antd";
+import "./App.css";
+import { BrowserRouter, Route } from "react-router-dom";
+import Board from "./features/Boards";
 
 function App() {
   return (
-    <div className="App">
-      <div>
-        <PageHeader
-          className="site-page-header"
-          onBack={() => null}
-          title="List Boards"
-          subTitle="Showing list boards from API"
-        />
-      </div>
-      <ListBoards />
-    </div>
+    <BrowserRouter>
+      <Route to="/boards" component={Board} />
+    </BrowserRouter>
   );
 }
 

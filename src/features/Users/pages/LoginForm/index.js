@@ -1,11 +1,23 @@
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./style.css";
+import axios from "axios";
 
 const LoginForm = () => {
-  const onFinish = (values) => {
-    console.log("hhhhhhhhhhhhhhhhh");
+  const onFinish = async (values) => {
     console.log("Received values of form: ", values);
+    try {
+      const res = await axios.post("http://localhost:3001/users/login", values);
+
+      console.log(res.data.data.accessToken);
+      res.data.data.accessToken &&
+        localStorage.setItem(
+          "accessToken",
+          JSON.stringify(res.data.data.accessToken)
+        );
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -13,7 +25,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Form.Item
+    <Form
       name="normal_login"
       className="login-form"
       initialValues={{
@@ -24,17 +36,17 @@ const LoginForm = () => {
     >
       <h1>Login</h1>
       <Form.Item
-        name="username"
+        name="email"
         rules={[
           {
             required: true,
-            message: "Please input your Username!",
+            message: "Please input your Email!",
           },
         ]}
       >
         <Input
           prefix={<UserOutlined className="site-form-item-icon" />}
-          placeholder="Username"
+          placeholder="Email"
         />
       </Form.Item>
       <Form.Item
@@ -52,7 +64,8 @@ const LoginForm = () => {
           placeholder="Password"
         />
       </Form.Item>
-      {/* <Form.Item>
+
+      <Form.Item>
         <Form.Item name="remember" valuePropName="checked" noStyle>
           <Checkbox>Remember me</Checkbox>
         </Form.Item>
@@ -60,7 +73,7 @@ const LoginForm = () => {
         <a className="login-form-forgot" href="">
           Forgot password
         </a>
-      </Form.Item> */}
+      </Form.Item>
 
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
@@ -68,7 +81,7 @@ const LoginForm = () => {
         </Button>
         Or <a href="">register now!</a>
       </Form.Item>
-    </Form.Item>
+    </Form>
   );
 };
 

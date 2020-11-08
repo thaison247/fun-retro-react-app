@@ -1,14 +1,24 @@
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import "./style.css";
+import axios from "axios";
 
 const RegisterForm = () => {
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log("Received values of form: ", values);
+    if (values.password != values.repeat_password) {
+      console.log("Error");
+    } else {
+      const res = await axios.post(
+        "http://localhost:3001/users/register",
+        values
+      );
+      console.log("after post req: ", res);
+    }
   };
 
   return (
-    <Form.Item
+    <Form
       name="normal_login"
       className="login-form"
       // initialValues={{
@@ -18,7 +28,7 @@ const RegisterForm = () => {
     >
       <h1>Register</h1>
       <Form.Item
-        name="username"
+        name="user_name"
         rules={[
           {
             required: true,
@@ -54,7 +64,7 @@ const RegisterForm = () => {
           },
         ]}
       >
-        <Input
+        <Input.Password
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="Password"
@@ -69,7 +79,7 @@ const RegisterForm = () => {
           },
         ]}
       >
-        <Input
+        <Input.Password
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="Repeat password"
@@ -82,7 +92,7 @@ const RegisterForm = () => {
         </Button>
         Or <a href="">Login now!</a>
       </Form.Item>
-    </Form.Item>
+    </Form>
   );
 };
 

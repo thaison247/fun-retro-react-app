@@ -4,7 +4,12 @@ import "./style.css";
 
 const LoginForm = () => {
   const onFinish = (values) => {
+    console.log("hhhhhhhhhhhhhhhhh");
     console.log("Received values of form: ", values);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
   };
 
   return (
@@ -15,6 +20,7 @@ const LoginForm = () => {
         remember: true,
       }}
       onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
     >
       <h1>Login</h1>
       <Form.Item
@@ -46,7 +52,7 @@ const LoginForm = () => {
           placeholder="Password"
         />
       </Form.Item>
-      <Form.Item>
+      {/* <Form.Item>
         <Form.Item name="remember" valuePropName="checked" noStyle>
           <Checkbox>Remember me</Checkbox>
         </Form.Item>
@@ -54,7 +60,7 @@ const LoginForm = () => {
         <a className="login-form-forgot" href="">
           Forgot password
         </a>
-      </Form.Item>
+      </Form.Item> */}
 
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">

@@ -5,7 +5,8 @@ import { EditOutlined, DeleteOutlined, BarsOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 // import "./style.css";
 
-function ListBoards() {
+function ListBoards({ match }) {
+  const { userId } = match.params;
   const [listBoard, setListBoard] = useState([]);
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false);
@@ -15,7 +16,7 @@ function ListBoards() {
 
   useEffect(() => {
     async function fetchBoardList() {
-      const result = await axios.get("http://localhost:3001/boards");
+      const result = await axios.get("http://localhost:3001/boards/" + userId);
       console.log(result.data.data.listBoards);
       setListBoard(result.data.data.listBoards);
     }
@@ -29,12 +30,12 @@ function ListBoards() {
   };
 
   const handleAddOk = async () => {
-    const result = await axios.post("http://localhost:3001/boards/", {
-      user_id: 1,
+    const result = await axios.post(`http://localhost:3001/boards/`, {
+      user_id: userId,
       board_name: name,
     });
 
-    history.push(`/boards/${result.data.data.boardId}`);
+    history.push(`/boards/${userId}/${result.data.data.boardId}`);
     setVisibleAdd(false);
   };
 

@@ -2,19 +2,24 @@ import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./style.css";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const LoginForm = () => {
+  const history = useHistory();
+
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
     try {
       const res = await axios.post("http://localhost:3001/users/login", values);
 
-      console.log(res.data.data.accessToken);
-      res.data.data.accessToken &&
+      if (res.data.data.accessToken) {
         localStorage.setItem(
           "accessToken",
           JSON.stringify(res.data.data.accessToken)
         );
+      }
+
+      history.push(`/boards/${res.data.data.user.user_id}`);
     } catch (err) {
       console.log(err);
     }

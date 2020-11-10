@@ -7,6 +7,7 @@ const Board = () => {
   return (
     <Switch>
       <Route path="/boards/:userId" exact component={ListBoard}></Route>
+      {/* <Route path="/boards" exact component={ListBoard}></Route> */}
       <Route
         path="/boards/:userId/:boardId"
         exact

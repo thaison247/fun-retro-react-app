@@ -1,6 +1,6 @@
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-// import FacebookLogin from "react-facebook-login";
+import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 import "./style.css";
 import axios from "axios";
@@ -14,9 +14,13 @@ const LoginForm = () => {
     try {
       const res = await axios.post("http://localhost:3001/users/login", values);
 
-      if (res.data.data.accessToken) {
+      if (res.data.data.accessToken && res.data.data.refreshToken) {
         localStorage.setItem(
           "accessToken",
+          JSON.stringify(res.data.data.accessToken)
+        );
+        localStorage.setItem(
+          "refreshToken",
           JSON.stringify(res.data.data.accessToken)
         );
       }
@@ -31,30 +35,77 @@ const LoginForm = () => {
     console.log("Failed:", errorInfo);
   };
 
-  const responseGoogle = (response) => {
+  const responseGoogle = async (response) => {
     console.log(response);
-    // call api
-    const res = axios.post("http://localhost:3001/users/google-login", {
-      tokenId: response.tokenId,
-    });
+    try {
+      // call api
+      const res = await axios.post("http://localhost:3001/users/google-login", {
+        tokenId: response.tokenId,
+      });
 
-    if (res) {
-      console.log("response data: ", { res });
-      res.then(
-        (result) => {
-          console.log(result);
-          console.log(result.data.data.accessToken);
-          localStorage.setItem(
-            "accessToken",
-            JSON.stringify(result.data.data.accessToken)
-          );
+      // get response and save to local storage
+      if (res.data.data.accessToken && res.data.data.refreshToken) {
+        localStorage.setItem(
+          "accessToken",
+          JSON.stringify(res.data.data.accessToken)
+        );
+        localStorage.setItem(
+          "refreshToken",
+          JSON.stringify(res.data.data.accessToken)
+        );
+      }
+      //redirect to boards page
+      history.push(`/boards/${res.data.data.user.user_id}`);
+    } catch (err) {
+      console.log(err);
+    }
 
-          history.push(`/boards/${result.data.data.user.user_id}`);
-        },
-        (err) => {
-          console.log(err);
+    // if (res) {
+    //   console.log("response data: ", { res });
+    //   res.then(
+    //     (result) => {
+    //       console.log(result);
+    //       console.log(result.data.data.accessToken);
+    //       localStorage.setItem(
+    //         "accessToken",
+    //         JSON.stringify(result.data.data.accessToken)
+    //       );
+
+    //       history.push(`/boards/${result.data.data.user.user_id}`);
+    //     },
+    //     (err) => {
+    //       console.log(err);
+    //     }
+    //   );
+    // }
+  };
+
+  const responseFacebook = async (response) => {
+    console.log(response);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3001/users/facebook-login",
+        {
+          accessToken: response.accessToken,
+          userID: response.userID,
         }
       );
+
+      if (res.data.data.accessToken && res.data.data.refreshToken) {
+        localStorage.setItem(
+          "accessToken",
+          JSON.stringify(res.data.data.accessToken)
+        );
+        localStorage.setItem(
+          "refreshToken",
+          JSON.stringify(res.data.data.accessToken)
+        );
+      }
+
+      history.push(`/boards/${res.data.data.user.user_id}`);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -122,6 +173,12 @@ const LoginForm = () => {
         onSuccess={responseGoogle}
         onFailure={responseGoogle}
         cookiePolicy={"single_host_origin"}
+      />
+
+      <FacebookLogin
+        appId="804911767017673" //APP ID NOT CREATED YET
+        fields="name,email,picture"
+        callback={responseFacebook}
       />
     </Form>
   );

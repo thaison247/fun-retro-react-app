@@ -1,5 +1,7 @@
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+// import FacebookLogin from "react-facebook-login";
+import GoogleLogin from "react-google-login";
 import "./style.css";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -27,6 +29,33 @@ const LoginForm = () => {
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+  };
+
+  const responseGoogle = (response) => {
+    console.log(response);
+    // call api
+    const res = axios.post("http://localhost:3001/users/google-login", {
+      tokenId: response.tokenId,
+    });
+
+    if (res) {
+      console.log("response data: ", { res });
+      res.then(
+        (result) => {
+          console.log(result);
+          console.log(result.data.data.accessToken);
+          localStorage.setItem(
+            "accessToken",
+            JSON.stringify(result.data.data.accessToken)
+          );
+
+          history.push(`/boards/${result.data.data.user.user_id}`);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
   };
 
   return (
@@ -86,6 +115,14 @@ const LoginForm = () => {
         </Button>
         Or <a href="">register now!</a>
       </Form.Item>
+
+      <GoogleLogin
+        clientId="365584952975-peumpl7kdkkqurb72c7n325lveopap25.apps.googleusercontent.com"
+        buttonText="Login with Google"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={"single_host_origin"}
+      />
     </Form>
   );
 };

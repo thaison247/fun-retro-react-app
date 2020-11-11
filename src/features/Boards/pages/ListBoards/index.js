@@ -77,7 +77,6 @@ function ListBoards({ match }) {
     const result = await axios.patch(
       `http://localhost:3001/boards/${boardId}`,
       {
-        user_id: 1,
         board_name: name,
       }
     );
@@ -94,6 +93,7 @@ function ListBoards({ match }) {
     console.log(listBoard);
 
     setVisibleEdit(false);
+    setName("");
   };
 
   const handleEditCancel = () => {

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { BarsOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Button, Card, Input, Modal, Space } from "antd";
 import axios from "axios";
-import { Button, Modal, Input, Card, Space } from "antd";
-import { EditOutlined, DeleteOutlined, BarsOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 // import "./style.css";
 
-function ListBoards({ match }) {
+function ListBoards() {
   // const { userId } = match.params;
   const [listBoard, setListBoard] = useState([]);
   const [visibleAdd, setVisibleAdd] = useState(false);
@@ -47,9 +47,7 @@ function ListBoards({ match }) {
 
     if (result) {
       console.log(result.data.data.boardId);
-      history.push(
-        `/boards/${result.data.data.userId}/${result.data.data.boardId}`
-      );
+      history.push(`/boards/${result.data.data.boardId}`);
     }
     setVisibleAdd(false);
     setName("");

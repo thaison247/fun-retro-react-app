@@ -1,6 +1,7 @@
+import { Layout } from "antd";
 import "antd/dist/antd.css";
-import "./App.css";
 import { BrowserRouter, Route } from "react-router-dom";
+import "./App.css";
 import Board from "./features/Boards";
 import User from "./features/Users";
 

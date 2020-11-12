@@ -6,13 +6,9 @@ import BoardDetail from "./pages/BoardDetail";
 const Board = () => {
   return (
     <Switch>
-      <Route path="/boards/:userId" exact component={ListBoard}></Route>
+      <Route path="/boards" exact component={ListBoard}></Route>
       {/* <Route path="/boards" exact component={ListBoard}></Route> */}
-      <Route
-        path="/boards/:userId/:boardId"
-        exact
-        component={BoardDetail}
-      ></Route>
+      <Route path="/boards/:boardId" exact component={BoardDetail}></Route>
     </Switch>
   );
 };

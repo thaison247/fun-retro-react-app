@@ -5,13 +5,11 @@ import Column from "../../components/Columns";
 const BoardDetail = ({ match }) => {
   const [boardInfo, setBoardInfo] = useState({});
   console.log("match: ----> ", match);
-  const { userId, boardId } = match.params;
+  const { boardId } = match.params;
 
   useEffect(() => {
     const fetchBoardInfo = async () => {
-      const res = await axios.get(
-        `http://localhost:3001/boards/${userId}/${boardId}/`
-      );
+      const res = await axios.get(`http://localhost:3001/boards/${boardId}/`);
 
       if (res.data.status === "success") {
         console.log(res.data.data);

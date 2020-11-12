@@ -25,7 +25,8 @@ const LoginForm = () => {
         );
       }
 
-      history.push(`/boards/${res.data.data.user.user_id}`);
+      // history.push(`/boards/${res.data.data.user.user_id}`);
+      history.push(`/boards`);
     } catch (err) {
       console.log(err);
     }
@@ -43,6 +44,8 @@ const LoginForm = () => {
         tokenId: response.tokenId,
       });
 
+      console.log(res);
+
       // get response and save to local storage
       if (res.data.data.accessToken && res.data.data.refreshToken) {
         localStorage.setItem(
@@ -55,7 +58,8 @@ const LoginForm = () => {
         );
       }
       //redirect to boards page
-      history.push(`/boards/${res.data.data.user.user_id}`);
+      // history.push(`/boards/${res.data.data.user.user_id}`);
+      history.push(`/boards`);
     } catch (err) {
       console.log(err);
     }
@@ -103,7 +107,8 @@ const LoginForm = () => {
         );
       }
 
-      history.push(`/boards/${res.data.data.user.user_id}`);
+      // history.push(`/boards/${res.data.data.user.user_id}`);
+      history.push(`/boards`);
     } catch (err) {
       console.log(err);
     }

@@ -4,6 +4,7 @@ import { BrowserRouter, Link, Route } from "react-router-dom";
 import "./App.css";
 import Board from "./features/Boards";
 import User from "./features/Users";
+import LoginForm from "./features/Users/pages/LoginForm";
 const { Header, Content, Footer } = Layout;
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         </Header>
         <Content style={{ padding: "0 50px" }}>
           <div className="site-layout-content">
+            <Route to="/" exact component={LoginForm} />
             <Route to="/boards" component={Board} />
             <Route to="/users" component={User} />
           </div>

@@ -1,5 +1,5 @@
 import { BarsOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Card, Input, Modal, Space } from "antd";
+import { Button, Card, Input, Modal, Row, Space } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -127,7 +127,7 @@ function ListBoards() {
 
   return (
     <div>
-      <Space size="large">
+      <Row size="large">
         {listBoard &&
           listBoard.map((board, index) => {
             return (
@@ -135,7 +135,7 @@ function ListBoards() {
                 key={index}
                 title={board.board_name}
                 bordered={true}
-                style={{ width: 300 }}
+                style={{ width: 250 }}
                 actions={[
                   <EditOutlined
                     key="edit"
@@ -156,7 +156,7 @@ function ListBoards() {
               </Card>
             );
           })}
-      </Space>
+      </Row>
       <Button onClick={handleAddBoard}>Thêm</Button>
       <Modal
         title={"Add Board"}
@@ -186,32 +186,6 @@ function ListBoards() {
       </Modal>
     </div>
   );
-
-  //   const [boards, setBoards] = useState([]);
-
-  //   useEffect(() => {
-  //     async function fetchData() {
-  //       //   const fetchURL = "https://sonnt-api-fun-retro.herokuapp.com/boards";
-  //       const fetchURL = "http://localhost:3001/boards";
-  //       const response = await axios.get(fetchURL);
-  //       setBoards(response.data);
-  //     }
-
-  //     fetchData();
-  //   }, []);
-
-  //   return (
-  //     <ul className="list-boards">
-  //       {boards.map((board) => (
-  //         <li key={board.board_id}>
-  //           <BoardItem
-  //             boardName={board.board_name}
-  //             boardCreatedDate={board.created_date}
-  //           />
-  //         </li>
-  //       ))}
-  //     </ul>
-  //   );
 }
 
 export default ListBoards;

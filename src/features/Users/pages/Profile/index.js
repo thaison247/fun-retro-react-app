@@ -1,6 +1,7 @@
 import { Button, Form, Input, Alert } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
+// import { useAuthContext } from '../../../../context/AuthContext';
 
 const layout = {
   labelCol: {
@@ -19,14 +20,23 @@ const tailLayout = {
 
 const Profile = ({ match }) => {
   const [form] = Form.useForm();
-  const { userId } = match.params;
+  // // const { authData } = useAuthContext();
+  // // const { userInfo } = authData;
 
   const [user, setUser] = useState({});
+  const [userId, setUserId] = useState({});
   const [alertVisible, setAlertVisible] = useState(false);
 
   useEffect(() => {
+    const user = localStorage.getItem("user");
+    const userInfo = JSON.parse(user);
+    setUserId(userInfo.user_id);
+    console.log("afdfasdfdsafasdfsdafdsafsdaf", userInfo);
+    setUser(userInfo);
     const fetchUser = async () => {
-      const res = await axios.get("http://localhost:3001/users/" + userId);
+      const res = await axios.get(
+        "http://localhost:3001/users/profile/" + userId
+      );
 
       if (res.data.status === "success") {
         console.log(res.data.data.user);
@@ -43,7 +53,7 @@ const Profile = ({ match }) => {
   const onFinish = async (values) => {
     // values = { ...values, user_id: userId };
     const res = await axios.patch(
-      `http://localhost:3001/users/${userId}`,
+      `http://localhost:3001/users/profile/${userId}`,
       values
     );
 
@@ -77,10 +87,11 @@ const Profile = ({ match }) => {
           },
         ]}
       >
-        <Input />
+        <Input placeholder={user.user_name} />
       </Form.Item>
 
       <Form.Item
+        value
         label="Email"
         name="email"
         rules={[
@@ -89,7 +100,7 @@ const Profile = ({ match }) => {
           },
         ]}
       >
-        <Input />
+        <Input placeholder={user.email} />
       </Form.Item>
 
       <Form.Item {...tailLayout}>

@@ -9,7 +9,7 @@ const User = () => {
     <Switch>
       <Route path="/users/login/" exact component={LoginForm}></Route>
       <Route path="/users/register" exact component={RegisterForm}></Route>
-      <Route path="/users/:userId" exact component={Profile}></Route>
+      <Route path="/users/profile" component={Profile}></Route>
     </Switch>
   );
 };

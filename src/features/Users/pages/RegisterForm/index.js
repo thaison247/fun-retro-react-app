@@ -108,7 +108,7 @@ const RegisterForm = () => {
         <Button type="primary" htmlType="submit" className="login-form-button">
           Register
         </Button>
-        Or <a href="">Login now!</a>
+        Or <a href="/users/login">Login now!</a>
       </Form.Item>
       {alertVisible && (
         <Alert

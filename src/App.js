@@ -9,15 +9,10 @@ import LoginForm from "./features/Users/pages/LoginForm";
 import AuthProvider from "./context/AuthContext";
 import { useAuthContext } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
+import Profile from "./features/Users/pages/Profile";
 const { Header, Content, Footer } = Layout;
 
 function App() {
-  const { authData } = useAuthContext();
-
-  if (authData) {
-    const userInfo = authData.userInfo;
-  }
-
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -28,25 +23,14 @@ function App() {
                 <span>List Boards</span>
                 <Link to="/boards" />
               </Menu.Item>
-
+              <Menu.Item key="2">
+                <span>Profile</span>
+                <Link to="/users/profile" />
+              </Menu.Item>
               <Menu.Item key="3">
                 <span>Register</span>
                 <Link to="/users/register" />
               </Menu.Item>
-              {authData ? (
-                <Menu.Item key="4">
-                  <Avatar
-                    style={{ backgroundColor: "#87d068" }}
-                    icon={<UserOutlined />}
-                  />
-                  <Link to="/users/register"></Link>
-                </Menu.Item>
-              ) : (
-                <Menu.Item key="2">
-                  <span>Login</span>
-                  <Link to="/users/login" />
-                </Menu.Item>
-              )}
             </Menu>
           </Header>
           <Content style={{ padding: "0 50px" }}>
@@ -55,6 +39,7 @@ function App() {
                 <Route path="/" exact component={LoginForm} />
                 <PrivateRoute path="/boards" component={Board} />
                 <Route path="/users" component={User} />
+                <PrivateRoute path="/users/profile" component={Profile} />
               </Switch>
             </div>
           </Content>

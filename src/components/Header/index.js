@@ -4,8 +4,6 @@ import { UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "context/AuthContext";
 
-import "./index.scss";
-
 const { Title } = Typography;
 const { Header: AntHeader } = Layout;
 
@@ -32,8 +30,8 @@ const Header = () => {
           style={{ backgroundColor: "#87d068" }}
           icon={<UserOutlined />}
         />
-        <Link to="/user" style={{ marginLeft: 10 }}>
-          {userInfo.username}
+        <Link to="/users/profile" style={{ marginLeft: 10 }}>
+          {userInfo.user_name}
         </Link>
       </div>
     </AntHeader>

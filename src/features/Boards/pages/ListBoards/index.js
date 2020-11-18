@@ -4,7 +4,7 @@ import {
   EditOutlined,
   CopyOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Input, Modal, Row, Space } from "antd";
+import { Button, Card, Input, Modal, Row, Space, Alert } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -17,6 +17,7 @@ function ListBoards() {
   const [visibleEdit, setVisibleEdit] = useState(false);
   const [name, setName] = useState("");
   const [boardId, setBoardId] = useState(null);
+  const [alertVisible, setAlertVisible] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -137,10 +138,22 @@ function ListBoards() {
     el.select();
     document.execCommand("copy");
     document.body.removeChild(el);
+    setAlertVisible(true);
   };
 
   return (
     <div>
+      {alertVisible && (
+        <Alert
+          message="Board URL Copied!"
+          type="success"
+          showIcon
+          closable={true}
+          onClose={() => {
+            setAlertVisible(false);
+          }}
+        />
+      )}
       <Row size="large">
         {listBoard &&
           listBoard.map((board, index) => {

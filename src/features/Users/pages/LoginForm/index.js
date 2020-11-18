@@ -1,32 +1,27 @@
-import { Form, Input, Button, Checkbox } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Form, Input } from "antd";
+import axios from "axios";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
-import "./style.css";
-import axios from "axios";
 import { useHistory } from "react-router-dom";
+import "./style.css";
+import { useAuthContext } from "../../../../context/AuthContext";
 
 const LoginForm = () => {
   const history = useHistory();
+  const { onLogin } = useAuthContext();
 
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
     try {
       const res = await axios.post("http://localhost:3001/users/login", values);
 
-      if (res.data.data.accessToken && res.data.data.refreshToken) {
-        localStorage.setItem(
-          "accessToken",
-          JSON.stringify(res.data.data.accessToken)
-        );
-        localStorage.setItem(
-          "refreshToken",
-          JSON.stringify(res.data.data.accessToken)
-        );
-      }
+      if (res.data.status == "success") {
+        onLogin(res.data.data);
 
-      // history.push(`/boards/${res.data.data.user.user_id}`);
-      history.push(`/boards`);
+        console.log(res.data.data);
+        history.push("/boards");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -47,41 +42,15 @@ const LoginForm = () => {
       console.log(res);
 
       // get response and save to local storage
-      if (res.data.data.accessToken && res.data.data.refreshToken) {
-        localStorage.setItem(
-          "accessToken",
-          JSON.stringify(res.data.data.accessToken)
-        );
-        localStorage.setItem(
-          "refreshToken",
-          JSON.stringify(res.data.data.accessToken)
-        );
+      if (res.data.status == "success") {
+        onLogin(res.data.data);
+
+        console.log(res.data.data);
+        history.push("/boards");
       }
-      //redirect to boards page
-      // history.push(`/boards/${res.data.data.user.user_id}`);
-      history.push(`/boards`);
     } catch (err) {
       console.log(err);
     }
-
-    // if (res) {
-    //   console.log("response data: ", { res });
-    //   res.then(
-    //     (result) => {
-    //       console.log(result);
-    //       console.log(result.data.data.accessToken);
-    //       localStorage.setItem(
-    //         "accessToken",
-    //         JSON.stringify(result.data.data.accessToken)
-    //       );
-
-    //       history.push(`/boards/${result.data.data.user.user_id}`);
-    //     },
-    //     (err) => {
-    //       console.log(err);
-    //     }
-    //   );
-    // }
   };
 
   const responseFacebook = async (response) => {
@@ -96,19 +65,12 @@ const LoginForm = () => {
         }
       );
 
-      if (res.data.data.accessToken && res.data.data.refreshToken) {
-        localStorage.setItem(
-          "accessToken",
-          JSON.stringify(res.data.data.accessToken)
-        );
-        localStorage.setItem(
-          "refreshToken",
-          JSON.stringify(res.data.data.accessToken)
-        );
-      }
+      if (res.data.status == "success") {
+        onLogin(res.data.data);
 
-      // history.push(`/boards/${res.data.data.user.user_id}`);
-      history.push(`/boards`);
+        console.log(res.data.data);
+        history.push("/boards");
+      }
     } catch (err) {
       console.log(err);
     }

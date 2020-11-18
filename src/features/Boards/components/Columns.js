@@ -7,6 +7,10 @@ import {
   FileDoneOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
+import "./column.css";
+import io from "socket.io-client";
+
+let socket;
 
 const Column = ({ col }) => {
   const [listCard, setListCard] = useState([]);
@@ -16,16 +20,24 @@ const Column = ({ col }) => {
   const [cardId, setCardId] = useState(null);
 
   useEffect(() => {
-    // Call api get card
-    const fetchCards = async () => {
-      console.log(col);
-      const result = await axios.get(
-        "http://localhost:3001/columns/" + col.columnId
-      );
-      console.log(result);
-      setListCard(result.data.data.listCards);
+    // socket connection
+    socket = io("http://localhost:3001");
+
+    // join to room
+    socket.emit("join-column", { room: col.columnId });
+
+    // get initial data
+    socket.emit("initial-data", { column_id: col.columnId });
+
+    socket.on("get-data", ({ listCards }) => {
+      console.log("list cards: ", listCards);
+      setListCard(listCards);
+    });
+
+    return function cleanUp() {
+      // socket.off("join-column");
+      // socket.off("get-data");
     };
-    fetchCards();
   }, []);
 
   // ADD
@@ -34,14 +46,11 @@ const Column = ({ col }) => {
   };
 
   const handleAddOk = async () => {
-    const result = await axios.post("http://localhost:3001/cards/", {
+    socket.emit("add-card", {
       column_id: col.columnId,
       content: content,
     });
 
-    console.log(result);
-
-    setListCard([...listCard, result.data.data.card]);
     setContent("");
     setVisibleAdd(false);
   };
@@ -64,19 +73,12 @@ const Column = ({ col }) => {
   };
 
   const handleEditOk = async () => {
-    const result = await axios.patch(`http://localhost:3001/cards/${cardId}`, {
-      column_id: col.columnId,
+    socket.emit("edit-card", {
+      card_id: cardId,
       content: content,
+      column_id: col.columnId,
     });
 
-    const updatedListCard = listCard.map((card) => {
-      if (card.card_id === cardId) {
-        return result.data.data.card;
-      }
-      return card;
-    });
-
-    setListCard(updatedListCard);
     setContent("");
     setVisibleEdit(false);
   };
@@ -93,16 +95,21 @@ const Column = ({ col }) => {
   };
 
   const handleDelete = async (cardId) => {
-    const result = await axios.delete(`http://localhost:3001/cards/${cardId}`, {
-      userId: 1,
+    // const result = await axios.delete(`http://localhost:3001/cards/${cardId}`, {
+    //   userId: 1,
+    // });
+
+    socket.emit("delete-card", {
+      card_id: cardId,
+      column_id: col.columnId,
     });
 
     setListCard(listCard.filter((card) => card.card_id !== cardId));
   };
 
   return (
-    <div>
-      <label>{col.columnName}</label>
+    <div className="column">
+      <h3>{col.columnName}</h3>
       <br />
       <Button onClick={handleAddCard}>Add Card To Column</Button>
       {listCard &&
@@ -110,16 +117,19 @@ const Column = ({ col }) => {
           return (
             <Card
               key={card.card_id}
-              bordered={false}
-              style={{ width: 300 }}
-              size={"default"}
+              bordered={true}
+              hoverable={true}
+              style={{ width: 350, marginTop: 5 }}
+              size={"small"}
               actions={[
                 <EditOutlined
                   key="edit"
+                  style={{ fontSize: 12 }}
                   onClick={() => handleEdit(card.card_id)}
                 />,
                 <DeleteOutlined
                   key="delete"
+                  style={{ fontSize: 12 }}
                   onClick={() => handleDelete(card.card_id)}
                 />,
               ]}

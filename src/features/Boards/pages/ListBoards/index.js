@@ -1,4 +1,9 @@
-import { BarsOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  BarsOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  CopyOutlined,
+} from "@ant-design/icons";
 import { Button, Card, Input, Modal, Row, Space } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -125,6 +130,15 @@ function ListBoards() {
     history.push(`/boards/${boardId}`);
   };
 
+  const handleCopyUrl = (boardId) => {
+    const el = document.createElement("textarea");
+    el.value = `http://localhost:3000/boards/${boardId}`;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+  };
+
   return (
     <div>
       <Row size="large">
@@ -133,9 +147,9 @@ function ListBoards() {
             return (
               <Card
                 key={index}
-                title={board.board_name}
                 bordered={true}
-                style={{ width: 250 }}
+                style={{ width: 250, margin: 5 }}
+                hoverable={true}
                 actions={[
                   <EditOutlined
                     key="edit"
@@ -145,14 +159,17 @@ function ListBoards() {
                     key="delete"
                     onClick={() => handleDelete(board.board_id)}
                   />,
-
                   <BarsOutlined
                     key="view"
                     onClick={() => handleViewDetail(board.board_id)}
                   />,
+                  <CopyOutlined
+                    key="copy-url"
+                    onClick={() => handleCopyUrl(board.board_id)}
+                  />,
                 ]}
               >
-                {/* <p>{board.created_date}</p> */}
+                {board.board_name}
               </Card>
             );
           })}

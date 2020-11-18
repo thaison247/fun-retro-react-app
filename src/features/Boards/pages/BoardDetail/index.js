@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Column from "../../components/Columns";
+import "./boardDetail.css";
 
 const BoardDetail = ({ match }) => {
   const [boardInfo, setBoardInfo] = useState({});
@@ -22,8 +23,10 @@ const BoardDetail = ({ match }) => {
   return (
     <div>
       <h2>{boardInfo.board_name}</h2>
-      {boardInfo.columns &&
-        boardInfo.columns.map((col, id) => <Column key={id} col={col} />)}
+      <div className="flexbox">
+        {boardInfo.columns &&
+          boardInfo.columns.map((col, id) => <Column key={id} col={col} />)}
+      </div>
     </div>
   );
 };
